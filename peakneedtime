@@ -111,7 +111,7 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	elseif input.KeyCode == Enum.KeyCode.C then
 		fireMove("Meur_Counter")
 		
-	elseif input.KeyCode == Enum.KeyCode.V then
+	elseif input.KeyCode == Enum.KeyCode.Z then
 		fireMove("John_M2")
 	end
 end)
