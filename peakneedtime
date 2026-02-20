@@ -1,0 +1,117 @@
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local player = Players.LocalPlayer
+
+local combatRemote = ReplicatedStorage
+	:WaitForChild("Net")
+	:WaitForChild("Character")
+	:WaitForChild("Combat")
+
+local character
+local humanoid
+local hrp
+
+-- Setup character safely
+local function setupCharacter(char)
+	character = char
+	humanoid = char:WaitForChild("Humanoid")
+	hrp = char:WaitForChild("HumanoidRootPart")
+end
+
+if player.Character then
+	setupCharacter(player.Character)
+end
+
+player.CharacterAdded:Connect(setupCharacter)
+
+-- Fire move function
+local function fireMove(moveType)
+	if not character or not hrp then return end
+	
+	local args
+	
+	-- X Key (Don Quixote)
+	if moveType == "Don_M2" then
+		
+		args = {
+			{
+				Module = ReplicatedStorage:WaitForChild("src")
+					:WaitForChild("Identities")
+					:WaitForChild("Don Quixote")
+					:WaitForChild("Lobotomy E.G.O::Lantern")
+					:WaitForChild("Moves")
+					:WaitForChild("Base")
+					:WaitForChild("M2")
+					:WaitForChild("Combos")
+					:WaitForChild("1"),
+					
+				Humanoid = humanoid,
+				Attempt = "M1",
+				HRP = hrp,
+				Char = character
+			}
+		}
+		
+	-- C Key (Meursault)
+	elseif moveType == "Meur_Counter" then
+		
+		args = {
+			{
+				Module = ReplicatedStorage:WaitForChild("src")
+					:WaitForChild("Identities")
+					:WaitForChild("Meursault")
+					:WaitForChild("Blade Lineage Mentor")
+					:WaitForChild("Moves")
+					:WaitForChild("Base")
+					:WaitForChild("S3-2"),
+					
+				Char = character,
+				HRP = hrp,
+				Attempt = "CounterSkill"
+			}
+		}
+		
+	-- Z Key (John - Dragon of Limbus)
+	elseif moveType == "John_M2" then
+		
+		args = {
+			{
+				Module = ReplicatedStorage:WaitForChild("src")
+					:WaitForChild("Others")
+					:WaitForChild("John")
+					:WaitForChild("Dragon of Limbus")
+					:WaitForChild("Moves")
+					:WaitForChild("Base")
+					:WaitForChild("M2")
+					:WaitForChild("Combos")
+					:WaitForChild("1"),
+					
+				Humanoid = humanoid,
+				Attempt = "M2",
+				HRP = hrp,
+				Char = character
+			}
+		}
+	end
+	
+	if args then
+		combatRemote:FireServer(unpack(args))
+	end
+end
+
+-- Keybinds
+UserInputService.InputBegan:Connect(function(input, processed)
+	if processed then return end
+	
+	if input.KeyCode == Enum.KeyCode.X then
+		fireMove("Don_M2")
+		
+	elseif input.KeyCode == Enum.KeyCode.C then
+		fireMove("Meur_Counter")
+		
+	elseif input.KeyCode == Enum.KeyCode.V then
+		fireMove("John_M2")
+	end
+end)
